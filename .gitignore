@@ -12,6 +12,7 @@ lerna-debug.log*
 
 # OS
 .DS_Store
+mongo-data-4.4
 
 # Tests
 /coverage
