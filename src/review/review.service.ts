@@ -29,7 +29,7 @@ export class ReviewService {
   }
 
   async deleteByProductId(productId: string) {
-    return this.reviewModel.deleteMany({
+    return this.reviewModel.findByIdAndDelete({
       productId: Types.ObjectId(productId),
     });
   }

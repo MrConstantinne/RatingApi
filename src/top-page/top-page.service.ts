@@ -26,14 +26,7 @@ export class TopPageService {
 
   async findMany(
     dto: FindTopPageDto,
-  ): Promise<
-    DocumentQuery<
-      DocumentType<TopPageModel>[],
-      DocumentType<TopPageModel>,
-      BeAnObject
-    > &
-      BeAnObject
-  > {
+  ): Promise<DocumentType<TopPageModel>[] | null> {
     return this.topPageModel.find(dto).exec();
   }
 
