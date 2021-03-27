@@ -17,7 +17,7 @@ export class ReviewService {
   }
 
   async delete(id: string): Promise<DocumentType<ReviewModel> | null> {
-    return this.reviewModel.findByIdAndDelete(id).exec();
+    return this.reviewModel.findByIdAndDelete(id);
   }
 
   async findByProductId(
@@ -29,8 +29,8 @@ export class ReviewService {
   }
 
   async deleteByProductId(productId: string) {
-    return this.reviewModel
-      .deleteMany({ productId: Types.ObjectId(productId) })
-      .exec();
+    return this.reviewModel.deleteMany({
+      productId: Types.ObjectId(productId),
+    });
   }
 }

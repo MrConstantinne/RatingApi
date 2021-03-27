@@ -10,22 +10,35 @@ import {
 } from '@nestjs/common';
 import { TopPageModel } from './top-page.model';
 import { FindTopPageDto } from './dto/find-top-page.dto';
+import { TopPageService } from './top-page.service';
 
 @Controller('top-page')
 export class TopPageController {
+  constructor(private readonly topPageService: TopPageService) {}
+
   @Post('create')
-  async create(@Body() dto: Omit<TopPageModel, '_id'>) {}
+  async create(@Body() dto: TopPageModel) {
+    return this.topPageService.create(dto);
+  }
 
   @Get(':id')
-  async get(@Param('id') id: string) {}
+  async get(@Param('id') id: string) {
+    return this.topPageService.findOne(id);
+  }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {}
+  async delete(@Param('id') id: string) {
+    return this.topPageService.delete(id);
+  }
 
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() dto: TopPageModel) {}
+  async patch(@Param('id') id: string, @Body() dto: TopPageModel) {
+    return this.topPageService.patch(id, dto);
+  }
 
   @HttpCode(200)
   @Post()
-  async find(@Body() dto: FindTopPageDto) {}
+  async find(@Body() dto: FindTopPageDto) {
+    return this.topPageService.findMany(dto);
+  }
 }
