@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -11,6 +13,7 @@ import {
 import { ProductModel } from './product.model';
 import { FindProductDto } from './dto/find-product.dto';
 import { ProductService } from './product.service';
+import { PRODUCT_NOT_FOUND } from './product.constants';
 
 @Controller('product')
 export class ProductController {
@@ -28,7 +31,10 @@ export class ProductController {
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.productService.delete(id);
+    const deleteDoc = await this.productService.delete(id);
+    if (!deleteDoc) {
+      throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Patch(':id')

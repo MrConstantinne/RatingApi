@@ -4,6 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
+import { TOP_PAGE_NOT_FOUND } from '../src/top-page/top-page.constants';
 
 const testDto: CreateTopPageDto = {
   firstCategory: 0,
@@ -30,7 +31,7 @@ const testDto: CreateTopPageDto = {
 
 const patchDto = { alias: 'TestAlias4' };
 
-const id = new Types.ObjectId().toHexString();
+const newId = new Types.ObjectId().toHexString();
 
 describe('TopPageController (e2e)', () => {
   let app: INestApplication;
@@ -67,21 +68,39 @@ describe('TopPageController (e2e)', () => {
       });
   });
 
-  it('/top-page/:id (PATCH) - success', async (done) => {
+  it('/top-page/:id (GET) - fail', async (done) => {
     return request(app.getHttpServer())
-      .patch('/top-page/' + createdId)
-      .send(JSON.stringify(patchDto))
+      .get('/top-page/' + new Types.ObjectId().toHexString())
       .expect(200)
       .then(({ body }: request.Response) => {
-        expect(body.alias).toEqual(patchDto.alias);
+        expect(body).toEqual({});
         done();
       });
   });
 
-  it('/top-page/:id (DELETE) - success', async () => {
+  it('/top-page/:id (PATCH) - success', () => {
+    return request(app.getHttpServer())
+      .patch('/top-page/' + createdId)
+      .send(JSON.stringify({ alias: 'TestAlias4' }))
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body.alias).toEqual(patchDto.alias);
+      });
+  });
+
+  it('/top-page/:id (DELETE) - success', () => {
     return request(app.getHttpServer())
       .delete('/top-page/' + createdId)
       .expect(200);
+  });
+
+  it('/top-page/:id (DELETE) - fail', () => {
+    return request(app.getHttpServer())
+      .delete('/top-page/' + new Types.ObjectId().toHexString())
+      .expect(404, {
+        statusCode: 404,
+        message: TOP_PAGE_NOT_FOUND,
+      });
   });
 
   afterAll(() => {

@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { disconnect } from 'mongoose';
+import { disconnect, Types } from 'mongoose';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { CreateProductDto } from '../src/product/dto/create-product.dto';
 import { AppModule } from '../src/app.module';
+import { PRODUCT_NOT_FOUND } from '../src/product/product.constants';
 
 const testDto: CreateProductDto = {
   image: 'TestImage',
@@ -62,6 +63,16 @@ describe('ProductControllers', () => {
       });
   });
 
+  it('/product/:id (GET) - fail', async (done) => {
+    return request(app.getHttpServer())
+      .get('/product/' + new Types.ObjectId().toHexString())
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body).toEqual({});
+        done();
+      });
+  });
+
   it('/product/:id (PATCH) - success', async (done) => {
     return request(app.getHttpServer())
       .patch('/product/' + createdId)
@@ -77,6 +88,15 @@ describe('ProductControllers', () => {
     return request(app.getHttpServer())
       .delete('/product/' + createdId)
       .expect(200);
+  });
+
+  it('/product/:id (DELETE) - fail', () => {
+    return request(app.getHttpServer())
+      .delete('/product/' + new Types.ObjectId().toHexString())
+      .expect(404, {
+        statusCode: 404,
+        message: PRODUCT_NOT_FOUND,
+      });
   });
 
   afterAll(() => {

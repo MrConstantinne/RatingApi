@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -11,6 +13,7 @@ import {
 import { TopPageModel } from './top-page.model';
 import { FindTopPageDto } from './dto/find-top-page.dto';
 import { TopPageService } from './top-page.service';
+import { TOP_PAGE_NOT_FOUND } from './top-page.constants';
 
 @Controller('top-page')
 export class TopPageController {
@@ -28,7 +31,10 @@ export class TopPageController {
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.topPageService.delete(id);
+    const deletedDoc = await this.topPageService.delete(id);
+    if (!deletedDoc) {
+      throw new HttpException(TOP_PAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Patch(':id')
