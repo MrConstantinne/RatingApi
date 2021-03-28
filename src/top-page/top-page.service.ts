@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { TopPageModel } from './top-page.model';
-import {
-  BeAnObject,
-  DocumentType,
-  ModelType,
-} from '@typegoose/typegoose/lib/types';
-import { DocumentQuery, Types } from 'mongoose';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
+import { Types } from 'mongoose';
 import { FindTopPageDto } from './dto/find-top-page.dto';
 
 @Injectable()
@@ -21,7 +17,7 @@ export class TopPageService {
   }
 
   async findOne(id: string): Promise<DocumentType<TopPageModel> | null> {
-    return this.topPageModel.findById({ id: Types.ObjectId(id) }).exec();
+    return this.topPageModel.findById({ _id: Types.ObjectId(id) }).exec();
   }
 
   async findMany(
