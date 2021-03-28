@@ -17,6 +17,7 @@ mongo-data-4.4
 # Tests
 /coverage
 /.nyc_output
+.clinic
 
 # IDEs and editors
 /.idea
