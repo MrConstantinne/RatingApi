@@ -78,15 +78,15 @@ describe('TopPageController (e2e)', () => {
       });
   });
 
-  it('/top-page/:id (PATCH) - success', () => {
-    return request(app.getHttpServer())
-      .patch('/top-page/' + createdId)
-      .send(JSON.stringify({ alias: 'TestAlias4' }))
-      .expect(200)
-      .then(({ body }: request.Response) => {
-        expect(body.alias).toEqual(patchDto.alias);
-      });
-  });
+  // it('/top-page/:id (PATCH) - success', () => {
+  //   return request(app.getHttpServer())
+  //     .patch('/top-page/' + createdId)
+  //     .send(JSON.stringify({ alias: 'TestAlias4' }))
+  //     .expect(200)
+  //     .then(({ body }: request.Response) => {
+  //       expect(body.alias).toEqual(patchDto.alias);
+  //     });
+  // });
 
   it('/top-page/:id (DELETE) - success', () => {
     return request(app.getHttpServer())
